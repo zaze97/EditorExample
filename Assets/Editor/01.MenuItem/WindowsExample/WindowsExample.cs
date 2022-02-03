@@ -1,4 +1,5 @@
 using System;
+using Editor._01.MenuItem.WindowsExample;
 using UnityEditor;
 using UnityEngine;
 
@@ -9,85 +10,107 @@ public class WindowsExample : EditorWindow
     {
         GetWindow<WindowsExample>().Show();
     }
+    public enum APIMode
+    {
+        GUILayout,
+        GUI,
+        EditorGUI
+    }
     public enum PageId
     {
-        Basic,Other
+        Basic,Enabled,Rotate,Scale,Color
     }
-
+    private APIMode _apiMode;
     private PageId _pageId;
-
+    private API _api;
+    private GUILayoutAPI _guiLayoutApi=new GUILayoutAPI();
+    private GUIAPI _guiApi=new GUIAPI();
+    private EditorGUIAPI _editorGuiApi=new EditorGUIAPI();
     private void OnGUI()
     {
+        _apiMode=(APIMode)GUILayout.Toolbar((int) _apiMode, Enum.GetNames(typeof(APIMode)));
         _pageId=(PageId)GUILayout.Toolbar((int) _pageId, Enum.GetNames(typeof(PageId)));
+        SwitchAPI();
         if (_pageId == PageId.Basic)
         {
-            one();
-        }else if (_pageId == PageId.Other)
+            _api.Draw();
+        }else if (_pageId == PageId.Enabled)
         {
-            
+            GUI_Enabled();
+        }
+        else if (_pageId == PageId.Rotate)
+        {
+            GUI_Rotate();
+        } else if (_pageId == PageId.Scale)
+        {
+            GUI_Scale();
+        }else if (_pageId == PageId.Color)
+        {
+            GUI_Color();
         }
     }
 
-    #region one
-
-    private string TextField;
-    private string TextArea;
-    private string PasswordField = string.Empty;
-    private Vector2 scrollVale;
-    float mscrollValue=0;
-    private void one()
+    private void SwitchAPI()
     {
-        scrollVale = GUILayout.BeginScrollView(scrollVale);
+        if(_apiMode==APIMode.GUILayout)
+            _api=_guiLayoutApi;
+        else if(_apiMode==APIMode.GUI)
+            _api=_guiApi;
+        else if(_apiMode==APIMode.EditorGUI)
+            _api=_editorGuiApi;
+    }
+    #region Color
+    private bool _isgUIColor;
+    private void GUI_Color()
+    {
+        _isgUIColor = GUILayout.Toggle(_isgUIColor,"是否可以变换颜色");
+        if (_isgUIColor)
         {
-            GUILayout.Label("窗口打开");
-            GUILayout.Label("--------输入框--------");
-            GUILayout.BeginHorizontal();
-            {
-                GUILayout.Label("TextField");
-                TextField = GUILayout.TextField(TextField);
-            }
-            GUILayout.EndHorizontal();
-            GUILayout.BeginHorizontal();
-            {
-                GUILayout.Label("TextArea");
-                TextArea = GUILayout.TextArea(TextArea);
-            }
-            GUILayout.EndHorizontal();
-            GUILayout.BeginHorizontal();
-            {
-                GUILayout.Label("PasswordField");
-                PasswordField = GUILayout.PasswordField(PasswordField, '*');
-            }
-            GUILayout.EndHorizontal();
-            GUILayout.BeginHorizontal();
-            {
-                GUILayout.Label("Button(按下执行一次)");
-                if (GUILayout.Button("Button"))
-                {
-                    Debug.Log("Button按钮按下");
-                }
-            }
-            GUILayout.EndHorizontal();
-            GUILayout.BeginHorizontal();
-            {
-                GUILayout.Label("RepeatButton(按下和抬起都会执行一次)");
-                if (GUILayout.RepeatButton("RepeatButton"))
-                {
-                    Debug.Log("RepeatButton按钮按下");
-                }
-            }
-            GUILayout.EndHorizontal();
-
-            GUILayout.Box("1");
-
-            GUILayout.BeginHorizontal();
-            {
-                GUILayout.Label("水平滑动条");
-                mscrollValue = GUILayout.HorizontalSlider(mscrollValue, 0, 1);
-            }
-            GUILayout.EndHorizontal();
+            GUI.color=Color.red;
         }
-        GUILayout.EndScrollView(); 
+        _api.Draw();
     }
     #endregion
+    #region Scale
+    private bool _isgUIScale;
+    private void GUI_Scale()
+    {
+        _isgUIScale = GUILayout.Toggle(_isgUIScale,"是否可以缩放");
+        if (_isgUIScale)
+        {
+            GUIUtility.ScaleAroundPivot(Vector2.one*0.5f, Vector2.zero);
+        }
+        _api.Draw();
+    }
+    #endregion
+    #region Rotate
+    private bool _isgUIRotate;
+    private void GUI_Rotate()
+    {
+        _isgUIRotate = GUILayout.Toggle(_isgUIRotate,"是否可以旋转");
+        if (_isgUIRotate)
+        {
+            GUIUtility.RotateAroundPivot(40f,Vector2.zero);
+        }
+        _api.Draw();
+    }
+    
+
+    #endregion
+    #region Enabled
+    private bool _isgUIEnabled;
+    private void GUI_Enabled()
+    {
+        _isgUIEnabled = GUILayout.Toggle(_isgUIEnabled,"是否可以点击");
+        if (GUI.enabled != _isgUIEnabled)
+        {
+            GUI.enabled = _isgUIEnabled;
+        }
+        _api.Draw();
+    }
+    
+
+    #endregion
+
+   
 }
