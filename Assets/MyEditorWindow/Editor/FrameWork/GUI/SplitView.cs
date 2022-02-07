@@ -59,9 +59,10 @@ namespace EditorFramework
             {
                 SecondArea(rects[1]);
             }
-
+            //绘制中间的线
             EditorGUI.DrawRect(mid.Zoom(AnchorType.MiddleCenter, -2), Color.gray);
 
+            //在中间线进行拖拽
             var e = Event.current;
             if (mid.Contains(e.mousePosition))
             {

@@ -50,14 +50,16 @@ namespace EditorFramework
                 }
             }
 
-            var dragInfo = DragAndDropTool.Drag(Event.current,leftRect);
-
-            if (dragInfo.EnterArea && dragInfo.Complete && !dragInfo.Dragging && dragInfo.Paths[0].IsDirectory())
+            DragAndDropTool.Drag(leftRect, OnComplete);
+            
+        }
+        private void OnComplete(DragAndDropTool.DragInfo info)
+        {
+            if (info.Paths[0].IsDirectory())
             {
-                mPath = dragInfo.Paths[0];
+                mPath = info.Paths[0];
             }
         }
-
         protected override void OnDispose()
         {
 

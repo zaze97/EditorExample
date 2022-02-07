@@ -14,18 +14,28 @@ namespace EditorFramework
         LowerCenter = 7,
         LowerRight = 8
     }
+
     public enum SplitType
     {
-        Vertical, Horizontal
+        Vertical,
+        Horizontal
     }
 
     public static class RectExtension
     {
+        /// <summary>
+        ///根据外层窗口缩放
+        /// </summary>
+        /// <param name="rect"></param>
+        /// <param name="type">描点位置</param>
+        /// <param name="pixel">缩放大小</param>
+        /// <returns></returns>
         public static Rect Zoom(this Rect rect, AnchorType type, float pixel)
         {
-            return Zoom(rect,type,new Vector2(pixel, pixel));
+            return Zoom(rect, type, new Vector2(pixel, pixel));
         }
-        public static Rect Zoom(this Rect rect, AnchorType type,Vector2 pixelOffset)
+
+        public static Rect Zoom(this Rect rect, AnchorType type, Vector2 pixelOffset)
         {
             float tempW = rect.width + pixelOffset.x;
             float tempH = rect.height + pixelOffset.y;
@@ -62,6 +72,7 @@ namespace EditorFramework
                     rect.x -= tempW - rect.width;
                     break;
             }
+
             rect.width = tempW;
             rect.height = tempH;
             return rect;
@@ -73,10 +84,12 @@ namespace EditorFramework
             r.y += pixels;
             return r;
         }
+
         public static Rect MoveUp(this Rect r, float pixels = 1)
         {
             return r.MoveDown(-pixels);
         }
+
         public static Rect MoveRight(this Rect r, float pixels = 1)
         {
             r.x += pixels;
@@ -88,16 +101,19 @@ namespace EditorFramework
             r.yMax -= pixels;
             return r;
         }
+
         public static Rect CutTop(this Rect r, float pixels)
         {
             r.yMin += pixels;
             return r;
         }
+
         public static Rect CutRight(this Rect r, float pixels)
         {
             r.xMax -= pixels;
             return r;
         }
+
         public static Rect CutLeft(this Rect r, float pixels)
         {
             r.xMin += pixels;
@@ -130,6 +146,7 @@ namespace EditorFramework
                     return default(Rect[]);
             }
         }
+
         public static Rect SplitRect(this Rect r, SplitType type, float offset, float padding = 0)
         {
             switch (type)
@@ -146,55 +163,65 @@ namespace EditorFramework
         public static Rect[] VerticalSplit(this Rect r, float width, float padding = 0, bool justMid = true)
         {
             if (justMid)
-                return new Rect[2]{
-                r.CutRight((int)(r.width-width)).CutRight(padding).CutRight(-Mathf.CeilToInt(padding/2f)),
-                r.CutLeft(width).CutLeft(padding).CutLeft(-Mathf.FloorToInt(padding/2f))
-            };
-            return new Rect[2]{
-                r.CutRight((int)(r.width-width)).Cut(padding).CutRight(-Mathf.CeilToInt(padding/2f)),
-                r.CutLeft(width).Cut(padding).CutLeft(-Mathf.FloorToInt(padding/2f))
+                return new Rect[2]
+                {
+                    r.CutRight((int) (r.width - width)).CutRight(padding).CutRight(-Mathf.CeilToInt(padding / 2f)),
+                    r.CutLeft(width).CutLeft(padding).CutLeft(-Mathf.FloorToInt(padding / 2f))
+                };
+            return new Rect[2]
+            {
+                r.CutRight((int) (r.width - width)).Cut(padding).CutRight(-Mathf.CeilToInt(padding / 2f)),
+                r.CutLeft(width).Cut(padding).CutLeft(-Mathf.FloorToInt(padding / 2f))
             };
         }
+
         public static Rect[] HorizontalSplit(this Rect r, float height, float padding = 0, bool justMid = true)
         {
             if (justMid)
-                return new Rect[2]{
-                r.CutBottom((int)(r.height-height)).CutBottom(padding).CutBottom(-Mathf.CeilToInt(padding/2f)),
-                r.CutTop(height).CutTop(padding).CutTop(-Mathf.FloorToInt(padding/2f))
+                return new Rect[2]
+                {
+                    r.CutBottom((int) (r.height - height)).CutBottom(padding).CutBottom(-Mathf.CeilToInt(padding / 2f)),
+                    r.CutTop(height).CutTop(padding).CutTop(-Mathf.FloorToInt(padding / 2f))
                 };
-            return new Rect[2]{
-                r.CutBottom((int)(r.height-height)).Cut(padding).CutBottom(-Mathf.CeilToInt(padding/2f)),
-                r.CutTop(height).Cut(padding).CutTop(-Mathf.FloorToInt(padding/2f))
+            return new Rect[2]
+            {
+                r.CutBottom((int) (r.height - height)).Cut(padding).CutBottom(-Mathf.CeilToInt(padding / 2f)),
+                r.CutTop(height).Cut(padding).CutTop(-Mathf.FloorToInt(padding / 2f))
             };
         }
+
         public static Rect HorizontalSplitRect(this Rect r, float height, float padding = 0)
         {
-            Rect rect = r.CutBottom((int)(r.height - height)).Cut(padding).CutBottom(-Mathf.CeilToInt(padding / 2f));
+            Rect rect = r.CutBottom((int) (r.height - height)).Cut(padding).CutBottom(-Mathf.CeilToInt(padding / 2f));
             rect.y += rect.height;
             rect.height = padding;
             return rect;
         }
+
         public static Rect VerticalSplitRect(this Rect r, float width, float padding = 0)
         {
-            Rect rect = r.CutRight((int)(r.width - width)).Cut(padding).CutRight(-Mathf.CeilToInt(padding / 2f));
+            Rect rect = r.CutRight((int) (r.width - width)).Cut(padding).CutRight(-Mathf.CeilToInt(padding / 2f));
             rect.x += rect.width;
             rect.width = padding;
             return rect;
         }
-        
+
 
         public static Vector2 TopLeft(this Rect r)
         {
             return new Vector2(r.x, r.y);
         }
+
         public static Vector2 TopRight(this Rect r)
         {
             return new Vector2(r.xMax, r.y);
         }
+
         public static Vector2 BottomRight(this Rect r)
         {
             return new Vector2(r.xMax, r.yMax);
         }
+
         public static Vector2 BottomLeft(this Rect r)
         {
             return new Vector2(r.x, r.yMax);

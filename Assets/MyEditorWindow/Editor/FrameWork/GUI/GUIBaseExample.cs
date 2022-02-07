@@ -5,7 +5,7 @@ using EditorWindows;
 using UnityEditor;
 using UnityEngine;
 
-namespace DefaultNamespace
+namespace EditorFramework
 {
     [CustomEditorWindow(2)]
     public class GUIBaseExample :EditorWindow

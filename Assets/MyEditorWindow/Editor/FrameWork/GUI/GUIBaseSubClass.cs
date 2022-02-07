@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace DefaultNamespace
+namespace EditorFramework
 {
     public class  Label:  GUIBase
     {

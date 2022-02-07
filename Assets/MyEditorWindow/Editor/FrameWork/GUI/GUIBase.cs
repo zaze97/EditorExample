@@ -1,12 +1,12 @@
 ﻿using System;
 using UnityEngine;
 
-namespace DefaultNamespace
+namespace EditorFramework
 {
     public abstract class GUIBase :IDisposable
     {
-        public bool mDisposed { get; private set; }
-        public Rect mPosition { get; private set; }
+        public bool mDisposed { get; protected set; }
+        public Rect mPosition { get; protected set; }
 
         public virtual void OnGUI(Rect position)
         {
